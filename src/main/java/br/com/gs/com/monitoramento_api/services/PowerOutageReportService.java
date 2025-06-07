@@ -43,6 +43,29 @@ public class PowerOutageReportService {
                 .orElse(null);
     }
 
+    public PowerOutageReportResponseDto update(Long id, PowerOutageReportRequestDto dto) {
+        return repository.findById(id)
+                .map(report -> {
+                    report.setBairro(dto.bairro);
+                    report.setCidade(dto.cidade);
+                    report.setCep(dto.cep);
+                    report.setTempoInterrupcao(dto.tempoInterrupcao);
+                    report.setPrejuizos(dto.prejuizos);
+                    report.setOrientacoes(dto.orientacoes);
+                    PowerOutageReport updated = repository.save(report);
+                    return mapToResponseDto(updated);
+                })
+                .orElse(null);
+    }
+
+    public boolean deleteById(Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     private PowerOutageReportResponseDto mapToResponseDto(PowerOutageReport report) {
         PowerOutageReportResponseDto dto = new PowerOutageReportResponseDto();
         dto.id = report.getId();

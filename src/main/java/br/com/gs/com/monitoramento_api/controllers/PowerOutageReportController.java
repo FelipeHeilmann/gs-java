@@ -45,4 +45,24 @@ public class PowerOutageReportController {
                 ? ResponseEntity.ok(report)
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualiza um relatório existente")
+    public ResponseEntity<PowerOutageReportResponseDto> update(
+            @PathVariable Long id,
+            @RequestBody PowerOutageReportRequestDto dto) {
+        var updated = service.update(id, dto);
+        return updated != null
+                ? ResponseEntity.ok(updated)
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Remove um relatório por ID")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        boolean deleted = service.deleteById(id);
+        return deleted
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }
